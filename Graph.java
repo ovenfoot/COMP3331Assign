@@ -1,16 +1,30 @@
 import java.util.*;
+import java.io.*;
+import java.nio.file.*;
+import java.nio.charset.Charset;
 
 public class Graph
 {
 	HashMap nodes;
+	
 	public Graph()
 	{
 		 nodes = new HashMap<String, HashMap<String, Edge>>();
 		 System.out.println("WOOO");
 	}
-	public Graph(String inputfilename)
+	public Graph(Path inputfilename)
 	{
-		System.out.println(inputfilename);
+		Charset charset = Charset.forName("US-ASCII");
+		try {
+			BufferedReader reader = Files.newBufferedReader(inputfilename, charset);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		System.out.println("FUCK YEAH");
+		
 	}
 }
 
