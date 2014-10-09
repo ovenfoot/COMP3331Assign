@@ -10,7 +10,7 @@ public class Graph
 	}
 	public Graph(String inputfilename)
 	{
-		
+		System.out.println(inputfilename);
 	}
 }
 
