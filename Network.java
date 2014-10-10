@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 public class Network
 {
 	HashMap<String, Vertex> nodes;
+	Queue<Request> activeVirtualCircuits;
 	public Network()
 	{
 		 nodes = new HashMap<String, Vertex>();
@@ -15,6 +16,7 @@ public class Network
 	public Network (String filename) throws IOException
 	{
 		nodes = new HashMap<String, Vertex>();
+		activeVirtualCircuits = new LinkedList<Request>();
 		BufferedReader instream = new BufferedReader(new FileReader(filename));
 		String inputLine;
 		
@@ -67,25 +69,76 @@ public class Network
 		thisVertex.adjacentVertices.put(thisEdge.sourceName, thisEdge);
 		nodes.put(thisEdge.destName, thisVertex);
 	}
-	public int createCircuit (List<String> vertices)
+	public int createCircuit (Request request)
 	{
 		Edge currEdge;
+		List<String> vertices = request.path;
+		
+		//First check list of active VCs to see if anything can be freed
+		scrubObsoleteVCs(request.timestamp);
+		
 		for(int i=1; i<vertices.size(); i++)
 		{
 			currEdge = nodes.get(vertices.get(i-1)).adjacentGet(vertices.get(i));
 			if (currEdge.activeVCs < currEdge.vcCapacity)
 			{
 				System.out.println("Linking "+vertices.get(i-1) + " and " + vertices.get(i));
+				System.out.println("Active Links count: "+currEdge.activeVCs+" Capacity is: "+currEdge.vcCapacity );
+				
 				currEdge.activeVCs++;
 			}
 			else
 			{
-				System.out.println("Blocked");
+				System.out.println("Blocking "+vertices.get(i-1) + " and " + vertices.get(i));
+				System.out.println("Active Links count: "+currEdge.activeVCs+" Capacity is: "+currEdge.vcCapacity );
+				
+				//rollback activeVC counts
+				
+				for(int j=i-1; j>0; j--)
+				{
+					currEdge = nodes.get(vertices.get(j-1)).adjacentGet(vertices.get(j));
+					currEdge.activeVCs--;
+				}
+				//System.out.println("Blocked");
 				return 1;
 			}
 			
 		}
+		
+		request.active = true;
+		activeVirtualCircuits.add(request);
 		return 0;
+	}
+	public void scrubObsoleteVCs(float time)
+	{
+		
+		if(!activeVirtualCircuits.isEmpty())
+		{
+			Request currRequest = activeVirtualCircuits.peek();
+			
+			while(!activeVirtualCircuits.isEmpty() && time > currRequest.endtime())
+			{
+				currRequest = activeVirtualCircuits.remove();
+				System.out.println("Scrubbing VC between "+currRequest.source +" and "+ currRequest.dest +
+						" endtime: " +currRequest.endtime());
+				System.out.println("Current time is "+ time);
+				deleteVC(currRequest);
+				
+				
+			}
+		}
+	}
+	
+	public void deleteVC(Request request)
+	{
+		Edge currEdge;
+		List<String> vertices = request.path;
+		
+		for(int i=1; i<vertices.size(); i++)
+		{
+			currEdge = nodes.get(vertices.get(i-1)).adjacentGet(vertices.get(i));		
+			currEdge.activeVCs--;
+		}
 	}
 	
 	public Vertex get(String key)

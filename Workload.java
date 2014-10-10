@@ -69,6 +69,8 @@ class Request
 	String source;
 	float duration;
 	int packets;
+	Boolean active = false;
+	List<String> path;
 	
 	public void print()
 	{
@@ -76,6 +78,10 @@ class Request
 				"|Source: " + source +
 				"|Dest: " + dest + 
 				"|Duration: "+ duration);
+	}
+	public float endtime()
+	{
+		return (timestamp+duration);
 	}
 }
 //hash->hash->(name, delay, capacity)

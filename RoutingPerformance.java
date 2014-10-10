@@ -19,7 +19,6 @@ public class RoutingPerformance
    	network_topology = new Network(args[0]);
    	workload = new Workload(args[1], Integer.parseInt(args[2]));
    	packetRate = Integer.parseInt(args[2]);
-   	List<String> nodeList;
    	//System.out.println("Packt Rate: "+packetRate);
    	//workload.element().print();
    	
@@ -32,9 +31,16 @@ public class RoutingPerformance
       	currRequest = workload.remove();
       	//System.out.println("Packets: "+ currRequest.packets);
       	System.out.println("Computing: " +currRequest.source + " to " +currRequest.dest);
-      	nodeList = shortHopSearch.computeBestPath(currRequest.source, currRequest.dest);
-      	System.out.println(nodeList);
-      	network_topology.createCircuit(nodeList);
+      	currRequest.path = shortHopSearch.computeBestPath(currRequest.source, currRequest.dest);
+      	System.out.println(currRequest.path);
+      	if(network_topology.createCircuit(currRequest)==0)
+      	{
+      		System.out.println("Success!");
+      	}
+      	else
+      	{
+      		System.out.println("BLOCKED");
+      	}
       	
       }
    	
