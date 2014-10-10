@@ -69,46 +69,48 @@ class SHP
 		while(!vertexQueue.isEmpty())
 		{
 			u = vertexQueue.remove();
-			//System.out.println("visiting everynode from " + u.name);
 			for (String key : u.adjacentVertices.keySet())
 			{
 				v = network_topology.get(key);
-				//vertexQueue.remove(v);
 				distuv = u.minDistance + 1;
-				//System.out.println("touching " + v.name);
 				if(distuv < v.minDistance)
 				{
 					v.minDistance = distuv;
 					v.previous = u;
 					vertexQueue.add(v);
 				}
-				//System.out.println("complete");
+			}
 				
-				//System.out.println(key);
-			}	
 		}
 	}
 	public List<String> computeSHPath(String source, String dest)
 	{
-		Vertex v,u;
+		Vertex v;
 		List<String>shortestPath = new LinkedList<String>();
+		
 		computeAllPaths(source);
+		
 		for (v= network_topology.get(dest); v != null; v = v.previous)
 		{   
 			shortestPath.add(v.name);
 		}
+		
 		Collections.reverse(shortestPath);
+		
+		clearPathData();
+		
+		return shortestPath;
+		
+	}
+	public void clearPathData()
+	{
+		//Clear out all paths
 		for(String key: network_topology.keyset())
 		{
 			//System.out.println("Clearing : "+ key);
 			network_topology.get(key).previous=null;
 			network_topology.get(key).minDistance = Double.POSITIVE_INFINITY;
 		}
-		
-		
-		//Clear out path terminations
-		return shortestPath;
-		
 	}
    
 	
