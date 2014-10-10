@@ -7,10 +7,7 @@ import java.nio.file.Paths;
 
 public class RoutingPerformance
 {
-   private static final double LOSS_RATE = 0.3;
-   private static final int AVERAGE_DELAY = 100;  // milliseconds
-   private static final int TIMEOUT = 1000; //msecs
-   private static Path topology_file;
+   //private static Path topology_file;
    private static Graph network_topology;
    public static void main(String[] args) throws Exception
    {
@@ -19,11 +16,9 @@ public class RoutingPerformance
       //    System.out.println("Required arguments: NETWORK_SCHEME ROUTING_SCHEME TOPOLOGY_FILE WORKLOAD_FILE PACKET_RATE");
       //    return;
       // }
-   	topology_file = Paths.get(args[0]);
-      network_topology = new Graph(args[0]);
+   	network_topology = new Graph(args[0]);
       network_topology.get("A").get("B").print();
-      // InetAddress IPAddr = InetAddress.getByName(args[0]);
-      // int port = Integer.parseInt(args[1]);
+      network_topology.get("J").get("K").print();
    }
 }
 
