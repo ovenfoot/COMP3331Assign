@@ -55,6 +55,10 @@ public class Workload
 	{
 		return allRequests.element();
 	}
+	public Boolean isEmpty()
+	{
+		return allRequests.isEmpty();
+	}
 		
 }
 class Request

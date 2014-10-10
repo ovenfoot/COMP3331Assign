@@ -64,12 +64,16 @@ public class Graph
 			thisVertex.name = thisEdge.destName;
 		}
 		
-		thisVertex.adjacentVertices.put(thisEdge.destName, thisEdge);
+		thisVertex.adjacentVertices.put(thisEdge.sourceName, thisEdge);
 		nodes.put(thisEdge.destName, thisVertex);
 	}
 	public Vertex get(String key)
 	{
 		return nodes.get(key);
+	}
+	public Set<String> keyset()
+	{
+		return nodes.keySet();
 	}
 }
 
@@ -86,6 +90,10 @@ class Vertex
 		minDistance =Double.POSITIVE_INFINITY;
 		name = "\0";
 		previous = null;
+	}
+	public void print()
+	{
+		System.out.println("Node: "+name+" connected to "+ adjacentVertices.keySet());
 	}
 }
 
