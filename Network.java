@@ -3,16 +3,16 @@ import java.io.*;
 import java.nio.file.*;
 import java.nio.charset.Charset;
 
-public class Graph
+public class Network
 {
 	HashMap<String, Vertex> nodes;
-	public Graph()
+	public Network()
 	{
 		 nodes = new HashMap<String, Vertex>();
 		 System.out.println("WOOO");
 	}
 	
-	public Graph (String filename) throws IOException
+	public Network (String filename) throws IOException
 	{
 		nodes = new HashMap<String, Vertex>();
 		BufferedReader instream = new BufferedReader(new FileReader(filename));
@@ -67,6 +67,27 @@ public class Graph
 		thisVertex.adjacentVertices.put(thisEdge.sourceName, thisEdge);
 		nodes.put(thisEdge.destName, thisVertex);
 	}
+	public int createCircuit (List<String> vertices)
+	{
+		Edge currEdge;
+		for(int i=1; i<vertices.size(); i++)
+		{
+			currEdge = nodes.get(vertices.get(i-1)).adjacentGet(vertices.get(i));
+			if (currEdge.activeVCs < currEdge.vcCapacity)
+			{
+				System.out.println("Linking "+vertices.get(i-1) + " and " + vertices.get(i));
+				currEdge.activeVCs++;
+			}
+			else
+			{
+				System.out.println("Blocked");
+				return 1;
+			}
+			
+		}
+		return 0;
+	}
+	
 	public Vertex get(String key)
 	{
 		return nodes.get(key);
@@ -95,6 +116,10 @@ class Vertex
 	{
 		System.out.println("Node: "+name+" connected to "+ adjacentVertices.keySet());
 	}
+	public Edge adjacentGet(String s)
+	{
+		return adjacentVertices.get(s);
+	}
 }
 
 
@@ -104,6 +129,7 @@ class Edge
 	String sourceName;
 	int propDelay;
 	int vcCapacity;
+	int activeVCs=0;
 	
 	public void print ()
 	{

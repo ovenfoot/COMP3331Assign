@@ -10,7 +10,7 @@ public class Workload
 		 System.out.println("WOOO");
 	}
 	
-	public Workload (String filename) throws IOException
+	public Workload (String filename, int packetRate) throws IOException
 	{
 		allRequests = new LinkedList<Request>();
 		BufferedReader instream = new BufferedReader(new FileReader(filename));
@@ -20,6 +20,7 @@ public class Workload
 		{
 			inputLine = instream.readLine();
 			currRequest = parse(inputLine);
+			currRequest.packets = (int) Math.round(currRequest.duration*packetRate);
 			allRequests.add(currRequest);
 		}
 		
@@ -67,6 +68,7 @@ class Request
 	String dest;
 	String source;
 	float duration;
+	int packets;
 	
 	public void print()
 	{
