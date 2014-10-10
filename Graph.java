@@ -5,17 +5,16 @@ import java.nio.charset.Charset;
 
 public class Graph
 {
-	HashMap<String, HashMap<String, Edge>> nodes;
-	
+	HashMap<String, Vertex> nodes;
 	public Graph()
 	{
-		 nodes = new HashMap<String, HashMap<String, Edge>>();
+		 nodes = new HashMap<String, Vertex>();
 		 System.out.println("WOOO");
 	}
 	
 	public Graph (String filename) throws IOException
 	{
-		nodes = new HashMap<String, HashMap<String, Edge>>();
+		nodes = new HashMap<String, Vertex>();
 		BufferedReader instream = new BufferedReader(new FileReader(filename));
 		String inputLine;
 		
@@ -32,7 +31,7 @@ public class Graph
 	public void parse (String line)
 	{
 		Edge thisEdge = new Edge();
-		HashMap<String, Edge> destMap;
+		Vertex thisVertex;
 		
 		String params[] = line.split(" ");
 	
@@ -43,38 +42,55 @@ public class Graph
 		
 		if(nodes.containsKey(thisEdge.sourceName))
 		{
-			destMap = nodes.get(thisEdge.sourceName);
+			thisVertex = nodes.get(thisEdge.sourceName);
+			
 		}
 		else
 		{
-			destMap = new HashMap<String,Edge>();
+			thisVertex = new Vertex();
+			thisVertex.name = thisEdge.sourceName;
 		}
 		
-		destMap.put(thisEdge.destName, thisEdge);
-		nodes.put(thisEdge.sourceName, destMap);
+		thisVertex.adjacentVertices.put(thisEdge.destName, thisEdge);
+		nodes.put(thisEdge.sourceName, thisVertex);
 		
 		if(nodes.containsKey(thisEdge.destName))
 		{
-			destMap = nodes.get(thisEdge.destName);
+			thisVertex = nodes.get(thisEdge.destName);
 		}
 		else
 		{
-			destMap = new HashMap<String,Edge>();
+			thisVertex = new Vertex();
+			thisVertex.name = thisEdge.destName;
 		}
 		
-		destMap.put(thisEdge.sourceName, thisEdge);
-		nodes.put(thisEdge.destName, destMap);
+		thisVertex.adjacentVertices.put(thisEdge.destName, thisEdge);
+		nodes.put(thisEdge.destName, thisVertex);
 	}
-	public HashMap<String,Edge> get(String key)
+	public Vertex get(String key)
 	{
 		return nodes.get(key);
 	}
 }
 
 
+class Vertex
+{
+	String name;
+	Vertex previous;
+	HashMap<String, Edge> adjacentVertices;
+	double minDistance = Double.POSITIVE_INFINITY;
+	public Vertex()
+	{
+		adjacentVertices  = new HashMap<String, Edge>();
+		minDistance =Double.POSITIVE_INFINITY;
+		name = "\0";
+		previous = null;
+	}
+}
 
 
-final class Edge
+class Edge
 {
 	String destName;
 	String sourceName;

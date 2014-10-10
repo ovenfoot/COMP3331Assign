@@ -1,3 +1,3 @@
 #!/bin/sh
 javac *.java
-java RoutingPerformance
+java RoutingPerformance topology.txt workload.txt 2

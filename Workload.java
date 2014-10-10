@@ -57,7 +57,7 @@ public class Workload
 	}
 		
 }
-final class Request
+class Request
 {
 	float timestamp;
 	String dest;
