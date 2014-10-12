@@ -74,7 +74,7 @@ public class Network
 		List<String> vertices = request.path;
 		
 		//First check list of active VCs to see if anything can be freed
-		//scrubObsoleteVCs(request.timestamp);
+		scrubObsoleteVCs(request.timestamp);
 		
 		for(int i=1; i<vertices.size(); i++)
 		{
