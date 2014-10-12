@@ -77,7 +77,15 @@ public class Workload
 			currRequest.timestamp = currTime;
 			currRequest.source = source;
 			currRequest.dest = dest;
-			currRequest.duration = packetDuration;
+			if((currTime + packetDuration)> endTime)
+			{
+				currRequest.duration = endTime - currTime;
+			}
+			else
+			{
+				currRequest.duration = packetDuration;
+			}
+			
 			allRequests.add(currRequest);
 		}
 		
