@@ -80,15 +80,15 @@ public class Network
 			currEdge = nodes.get(vertices.get(i-1)).adjacentGet(vertices.get(i));
 			if (currEdge.activeVCs < currEdge.vcCapacity)
 			{
-				System.out.println("Linking "+vertices.get(i-1) + " and " + vertices.get(i));
-				System.out.println("Active Links count: "+currEdge.activeVCs+" Capacity is: "+currEdge.vcCapacity );
+				//System.out.println("Linking "+vertices.get(i-1) + " and " + vertices.get(i));
+				//System.out.println("Active Links count: "+currEdge.activeVCs+" Capacity is: "+currEdge.vcCapacity );
 				
 				currEdge.activeVCs++;
 			}
 			else
 			{
-				System.out.println("Blocking "+vertices.get(i-1) + " and " + vertices.get(i));
-				System.out.println("Active Links count: "+currEdge.activeVCs+" Capacity is: "+currEdge.vcCapacity );
+				//System.out.println("Blocking "+vertices.get(i-1) + " and " + vertices.get(i));
+				//System.out.println("Active Links count: "+currEdge.activeVCs+" Capacity is: "+currEdge.vcCapacity );
 				
 				//rollback activeVC counts
 				
@@ -117,9 +117,9 @@ public class Network
 			while(activeVirtualCircuits.size()>0 && time > currRequest.endtime())
 			{
 				currRequest = activeVirtualCircuits.remove();
-				System.out.println("Scrubbing VC between "+currRequest.source +" and "+ currRequest.dest +
-						" endtime: " +currRequest.endtime());
-				System.out.println("Current time is "+ time);
+//				System.out.println("Scrubbing VC between "+currRequest.source +" and "+ currRequest.dest +
+//						" endtime: " +currRequest.endtime());
+//				System.out.println("Current time is "+ time);
 				deleteVC(currRequest);
 				
 				
