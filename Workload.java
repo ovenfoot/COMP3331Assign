@@ -19,7 +19,7 @@ public class Workload
 		String inputLine;
 		Request currRequest;
 		networkingScheme = _networkingScheme;
-		if(networkingScheme == "CIRCUIT")
+		if(networkingScheme.equals("CIRCUIT"))
 		{
 			while(instream.ready())
 			{
@@ -29,7 +29,7 @@ public class Workload
 				allRequests.add(currRequest);
 			}
 		}	
-		if(networkingScheme == "PACKET")
+		else if(networkingScheme.equals("PACKET"))
 		{
 			while(instream.ready())
 			{

@@ -16,11 +16,11 @@ public class RoutingPerformance
    
    public static void main(String[] args) throws Exception
    {
-      // Get command line argument.
-      // if (args.length != 5) {
-      //    System.out.println("Required arguments: NETWORK_SCHEME ROUTING_SCHEME TOPOLOGY_FILE WORKLOAD_FILE PACKET_RATE");
-      //    return;
-      // }
+       //Get command line argument.
+   if (args.length != 5) {
+      System.out.println("Required arguments: NETWORK_SCHEME ROUTING_SCHEME TOPOLOGY_FILE WORKLOAD_FILE PACKET_RATE");
+      return;
+   }
    	Request currRequest;
    	network_topology = new Network(args[TOPOLOGY_FILE]);
    	workload = new Workload(args[WORKLOAD_FILE], Integer.parseInt(args[PACKET_RATE]), args[NETWORKING_SCHEME]);
@@ -82,7 +82,7 @@ class RoutingProcessor
 
 		Queue<Vertex> vertexQueue = new LinkedList<Vertex>();
 		
-		if(routing_method == "SHP")
+		if(routing_method.equals("SHP"))
 		{
 			sourceVertex.minDistance = 0;
 			vertexQueue.add(sourceVertex);
@@ -105,7 +105,7 @@ class RoutingProcessor
 				
 		}
 				
-		else if (routing_method =="SDP")
+		else if (routing_method.equals("SDP"))
 		{
 			sourceVertex.minDistance = 0;
 			vertexQueue.add(sourceVertex);
@@ -126,7 +126,7 @@ class RoutingProcessor
 					
 			}
 		}
-		else if (routing_method == "LLP")
+		else if (routing_method.equals("LLP"))
 		{
 			sourceVertex.minDistance = 0;
 			vertexQueue.add(sourceVertex);
