@@ -82,71 +82,73 @@ class RoutingProcessor
 
 		Queue<Vertex> vertexQueue = new LinkedList<Vertex>();
 		
-		switch (routing_method)
+		if(routing_method == "SHP")
 		{
-			case "SHP":
-				sourceVertex.minDistance = 0;
-				vertexQueue.add(sourceVertex);
-				while(!vertexQueue.isEmpty())
+			sourceVertex.minDistance = 0;
+			vertexQueue.add(sourceVertex);
+			while(!vertexQueue.isEmpty())
+			{
+				u = vertexQueue.remove();
+				for (String key : u.adjacentVertices.keySet())
 				{
-					u = vertexQueue.remove();
-					for (String key : u.adjacentVertices.keySet())
+					v = network_topology.get(key);
+					distuv = u.minDistance + 1;
+					if(distuv < v.minDistance)
 					{
-						v = network_topology.get(key);
-						distuv = u.minDistance + 1;
-						if(distuv < v.minDistance)
-						{
-							v.minDistance = distuv;
-							v.previous = u;
-							vertexQueue.add(v);
-						}
+						v.minDistance = distuv;
+						v.previous = u;
+						vertexQueue.add(v);
 					}
-						
 				}
+					
+			}
 				
-				break;
-				
-			case "SDP":
-				sourceVertex.minDistance = 0;
-				vertexQueue.add(sourceVertex);
-				while(!vertexQueue.isEmpty())
-				{
-					u = vertexQueue.remove();
-					for (String key : u.adjacentVertices.keySet())
-					{
-						v = network_topology.get(key);
-						distuv = u.minDistance + u.adjacentVertices.get(key).propDelay;
-						if(distuv < v.minDistance)
-						{
-							v.minDistance = distuv;
-							v.previous = u;
-							vertexQueue.add(v);
-						}
-					}
-						
-				}
-			case "LLP":
-				sourceVertex.minDistance = 0;
-				vertexQueue.add(sourceVertex);
-				while(!vertexQueue.isEmpty())
-				{
-					u = vertexQueue.remove();
-					for (String key : u.adjacentVertices.keySet())
-					{
-						v = network_topology.get(key);
-						distuv = Math.max(u.minDistance,u.adjacentGet(key).load());
-						//System.out.println(u.adjacentGet(key).load());
-						if(distuv < v.minDistance)
-						{
-							v.minDistance = distuv;
-							v.previous = u;
-							vertexQueue.add(v);
-						}
-					}
-						
-				}
-				break;
 		}
+				
+		else if (routing_method =="SDP")
+		{
+			sourceVertex.minDistance = 0;
+			vertexQueue.add(sourceVertex);
+			while(!vertexQueue.isEmpty())
+			{
+				u = vertexQueue.remove();
+				for (String key : u.adjacentVertices.keySet())
+				{
+					v = network_topology.get(key);
+					distuv = u.minDistance + u.adjacentVertices.get(key).propDelay;
+					if(distuv < v.minDistance)
+					{
+						v.minDistance = distuv;
+						v.previous = u;
+						vertexQueue.add(v);
+					}
+				}
+					
+			}
+		}
+		else if (routing_method == "LLP")
+		{
+			sourceVertex.minDistance = 0;
+			vertexQueue.add(sourceVertex);
+			while(!vertexQueue.isEmpty())
+			{
+				u = vertexQueue.remove();
+				for (String key : u.adjacentVertices.keySet())
+				{
+					v = network_topology.get(key);
+					distuv = Math.max(u.minDistance,u.adjacentGet(key).load());
+					//System.out.println(u.adjacentGet(key).load());
+					if(distuv < v.minDistance)
+					{
+						v.minDistance = distuv;
+						v.previous = u;
+						vertexQueue.add(v);
+					}
+				}
+					
+			}
+		}
+		
 		
 		
 		

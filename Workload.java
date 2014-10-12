@@ -19,30 +19,28 @@ public class Workload
 		String inputLine;
 		Request currRequest;
 		networkingScheme = _networkingScheme;
-		switch (networkingScheme) 
+		if(networkingScheme == "CIRCUIT")
 		{
-			case "CIRCUIT":
-				while(instream.ready())
-				{
-					inputLine = instream.readLine();
-					currRequest = parseCircuits(inputLine);
-					currRequest.packets = (int) Math.round(currRequest.duration*packetRate);
-					allRequests.add(currRequest);
-				}
-			break;
-			
-			case "PACKET":
-			
-				while(instream.ready())
-				{
-					inputLine = instream.readLine();
-					packetDuration = 1/packetRate;
-					parsePackets(inputLine, packetDuration);
-				}
-			break;
+			while(instream.ready())
+			{
+				inputLine = instream.readLine();
+				currRequest = parseCircuits(inputLine);
+				currRequest.packets = (int) Math.round(currRequest.duration*packetRate);
+				allRequests.add(currRequest);
+			}
+		}	
+		if(networkingScheme == "PACKET")
+		{
+			while(instream.ready())
+			{
+				inputLine = instream.readLine();
+				packetDuration = 1/packetRate;
+				parsePackets(inputLine, packetDuration);
+			}
+		}	
 			
 			
-		}
+		
 
 		
 		instream.close();
