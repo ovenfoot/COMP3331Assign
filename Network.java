@@ -118,9 +118,9 @@ public class Network
 			while(!activeVirtualCircuits.isEmpty() && time > currRequest.endtime())
 			{
 				currRequest = activeVirtualCircuits.remove();
-				System.out.println("Scrubbing VC between "+currRequest.source +" and "+ currRequest.dest +
-						" endtime: " +currRequest.endtime());
-				System.out.println("Current time is "+ time);
+//				System.out.println("Scrubbing VC between "+currRequest.source +" and "+ currRequest.dest +
+//						" endtime: " +currRequest.endtime());
+//				System.out.println("Current time is "+ time);
 				deleteVC(currRequest);
 				
 				
