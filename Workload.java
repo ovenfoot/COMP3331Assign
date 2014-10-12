@@ -3,7 +3,8 @@ import java.io.*;
 //import java.util.Queue;
 public class Workload
 {
-	private Queue<Request> allRequests;
+	Comparator<Request> rCompare = new RequestComparator();
+	private PriorityQueue<Request> allRequests;
 	private static String networkingScheme;
 	private float packetDuration;
 	
@@ -14,7 +15,7 @@ public class Workload
 	
 	public Workload (String filename, float packetRate, String _networkingScheme) throws IOException
 	{
-		allRequests = new LinkedList<Request>();
+		allRequests = new PriorityQueue<Request>(100, rCompare);
 		BufferedReader instream = new BufferedReader(new FileReader(filename));
 		String inputLine;
 		Request currRequest;
@@ -63,12 +64,15 @@ public class Workload
 		Request currRequest;
 		float currTime;
 		float endTime;
+		float duration;
 		String source, dest;
 		String params[] = line.split(" ");
 		
 		source = params[1];
 		dest = params[2];
-		endTime = Float.parseFloat(params[0])+Float.parseFloat(params[3]);
+		currTime = Float.parseFloat(params[0]);
+		duration = Float.parseFloat(params[3]);
+		endTime = currTime + duration;
 		for (currTime = Float.parseFloat(params[0]); 
 				currTime < endTime; 
 				currTime+=packetDuration)
@@ -83,7 +87,7 @@ public class Workload
 			}
 			else
 			{
-				currRequest.duration = packetDuration;
+				currRequest.duration = packetDuration-(float)0.0001;
 			}
 			
 			allRequests.add(currRequest);
@@ -134,6 +138,15 @@ class Request
 	public float endtime()
 	{
 		return (timestamp+duration);
+	}
+}
+
+class RequestComparator implements Comparator<Request>
+{
+	@Override
+	public int compare (Request r1, Request r2)
+	{
+		return (int)(r1.timestamp - r2.timestamp);
 	}
 }
 //hash->hash->(name, delay, capacity)

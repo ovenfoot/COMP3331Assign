@@ -109,12 +109,12 @@ public class Network
 	}
 	public void scrubObsoleteVCs(float time)
 	{
-		
-		if(activeVirtualCircuits.size()>0)
+		//System.out.println("Trying to srub at time "+ time);
+		if(!activeVirtualCircuits.isEmpty())
 		{
 			Request currRequest = activeVirtualCircuits.peek();
 			
-			while(activeVirtualCircuits.size()>0 && time > currRequest.endtime())
+			while(!activeVirtualCircuits.isEmpty() && time > currRequest.endtime())
 			{
 				currRequest = activeVirtualCircuits.remove();
 				System.out.println("Scrubbing VC between "+currRequest.source +" and "+ currRequest.dest +

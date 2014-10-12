@@ -36,16 +36,17 @@ public class RoutingPerformance
       {
       	currRequest = workload.remove();
       	//System.out.println("Packets: "+ currRequest.packets);
-      	System.out.println("Computing: " +currRequest.source + " to " +currRequest.dest);
+      	System.out.println("Computing: " +currRequest.source + " to " +currRequest.dest + " currtime is: " + currRequest.timestamp + 
+      			" endtime is: " + currRequest.endtime());
       	currRequest.path = router.computeBestPath(currRequest.source, currRequest.dest);
       	//System.out.println(currRequest.path);
       	if(network_topology.createCircuit(currRequest)==0)
       	{
-      		//System.out.println("Success!");
+      		System.out.println("Success!");
       	}
       	else
       	{
-      		//System.out.println("BLOCKED");
+      		System.out.println("BLOCKED");
       	}
       	
       }
