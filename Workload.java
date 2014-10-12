@@ -4,29 +4,50 @@ import java.io.*;
 public class Workload
 {
 	private Queue<Request> allRequests;
-
+	private static String networkingScheme;
+	private float packetDuration;
+	
 	public Workload()
 	{
 		 System.out.println("WOOO");
 	}
 	
-	public Workload (String filename, int packetRate) throws IOException
+	public Workload (String filename, float packetRate, String _networkingScheme) throws IOException
 	{
 		allRequests = new LinkedList<Request>();
 		BufferedReader instream = new BufferedReader(new FileReader(filename));
 		String inputLine;
 		Request currRequest;
-		while(instream.ready())
+		networkingScheme = _networkingScheme;
+		switch (networkingScheme) 
 		{
-			inputLine = instream.readLine();
-			currRequest = parse(inputLine);
-			currRequest.packets = (int) Math.round(currRequest.duration*packetRate);
-			allRequests.add(currRequest);
+			case "CIRCUIT":
+				while(instream.ready())
+				{
+					inputLine = instream.readLine();
+					currRequest = parseCircuits(inputLine);
+					currRequest.packets = (int) Math.round(currRequest.duration*packetRate);
+					allRequests.add(currRequest);
+				}
+			break;
+			
+			case "PACKET":
+			
+				while(instream.ready())
+				{
+					inputLine = instream.readLine();
+					packetDuration = 1/packetRate;
+					parsePackets(inputLine, packetDuration);
+				}
+			break;
+			
+			
 		}
+
 		
 		instream.close();
 	}
-	public Request parse (String line)
+	public Request parseCircuits (String line)
 	{
 		Request request = new Request();
 		
@@ -38,6 +59,31 @@ public class Workload
 		request.duration = Float.parseFloat(params[3]);
 		
 		return request;
+	}
+	public void parsePackets (String line, float packetDuration)
+	{
+		Request currRequest;
+		float currTime;
+		float endTime;
+		String source, dest;
+		String params[] = line.split(" ");
+		
+		source = params[1];
+		dest = params[2];
+		endTime = Float.parseFloat(params[0])+Float.parseFloat(params[3]);
+		for (currTime = Float.parseFloat(params[0]); 
+				currTime < endTime; 
+				currTime+=packetDuration)
+		{
+			currRequest = new Request();
+			currRequest.timestamp = currTime;
+			currRequest.source = source;
+			currRequest.dest = dest;
+			currRequest.duration = packetDuration;
+			allRequests.add(currRequest);
+		}
+		
+		
 	}
 	
 	public void add(Request _request)

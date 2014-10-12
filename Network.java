@@ -191,6 +191,13 @@ class Edge
 			"|propDelay: " + propDelay + 
 			"|vcCapacity: " + vcCapacity);
 	}
+	public double load ()
+	{
+		float intermediateRes;
+		intermediateRes = ((float)activeVCs/(float)vcCapacity);
+		//System.out.println(intermediateRes);
+		return (intermediateRes);
+	}
 }
 
 //hash->hash->(name, delay, capacity)
