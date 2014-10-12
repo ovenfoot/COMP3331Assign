@@ -3,8 +3,9 @@ import java.io.*;
 
 public class Network
 {
+	Comparator<Request> rCompare = new RequestComparator();
 	HashMap<String, Vertex> nodes;
-	Queue<Request> activeVirtualCircuits;
+	PriorityQueue<Request> activeVirtualCircuits;
 	public Network()
 	{
 		 nodes = new HashMap<String, Vertex>();
@@ -14,7 +15,7 @@ public class Network
 	public Network (String filename) throws IOException
 	{
 		nodes = new HashMap<String, Vertex>();
-		activeVirtualCircuits = new LinkedList<Request>();
+		activeVirtualCircuits = new PriorityQueue<Request>(10, rCompare);
 		BufferedReader instream = new BufferedReader(new FileReader(filename));
 		String inputLine;
 		
@@ -73,7 +74,7 @@ public class Network
 		List<String> vertices = request.path;
 		
 		//First check list of active VCs to see if anything can be freed
-		scrubObsoleteVCs(request.timestamp);
+		//scrubObsoleteVCs(request.timestamp);
 		
 		for(int i=1; i<vertices.size(); i++)
 		{

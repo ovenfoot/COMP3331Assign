@@ -146,7 +146,15 @@ class RequestComparator implements Comparator<Request>
 	@Override
 	public int compare (Request r1, Request r2)
 	{
-		return (int)(r1.timestamp - r2.timestamp);
+		if(r1.timestamp > r2.timestamp)
+		{
+			return 1;
+		}
+		else
+		{
+			return -1;
+		}
+		//return (int)(r1.timestamp - r2.timestamp);
 	}
 }
 //hash->hash->(name, delay, capacity)
