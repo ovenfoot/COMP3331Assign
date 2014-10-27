@@ -1,5 +1,7 @@
 import java.util.*;
 
+import sun.net.www.protocol.gopher.GopherClient;
+
 
 public class RoutingPerformance
 {
@@ -24,35 +26,46 @@ public class RoutingPerformance
       return;
    }
    	Request currRequest;
+   	
+   	//Initialise Network topology and workload based on input files
+   	
+   	
    	network_topology = new Network(args[TOPOLOGY_FILE]);
    	workload = new Workload(args[WORKLOAD_FILE], Integer.parseInt(args[PACKET_RATE]), args[NETWORKING_SCHEME]);
    	packetRate = Float.parseFloat(args[PACKET_RATE]);
    	numHops = 0;
    	cumPropagationDelay = 0;
-   	//System.out.println("Packt Rate: "+packetRate);
-   	//workload.element().print();
    	
-      //network_topology.get("A").adjacentVertices.get("B").print();
-      //network_topology.get("J").adjacentVertices.get("K").print();
+   	
+   	//Initialise the dijkstra's processor and set the routing scheme
    	router = new RoutingProcessor(network_topology);
    	router.setMethod(args[ROUTING_SCHEME]);
+   	
+   	
+   	
+   	//go throug hthe workload and process each request
    	while(!workload.isEmpty())
-      {
+   	{
+   		//Pop off the top of the list
       	currRequest = workload.remove();
-      	//System.out.println("Packets: "+ currRequest.packets);
+
+//      	System.out.println("Packets: "+ currRequest.packets);
 //      	System.out.println("Computing: " +currRequest.source + " to " +currRequest.dest + " currtime is: " + currRequest.timestamp + 
 //      			" endtime is: " + currRequest.endtime());
+      	
+      	//Calculate the path using the routing processor
       	currRequest.path = router.computeBestPath(currRequest.source, currRequest.dest);
       	
       	
       	//System.out.println(currRequest.path);
       	
-      	
+      	//Sum up the number of hops and propagation delay on the path
       	numHops+= network_topology.numHops(currRequest);
       	cumPropagationDelay+=network_topology.calculateCumPropDelay(currRequest);
       	
       	
       	
+      	//createCircuit returns 0 if path is successful. nonzero if blocked
       	if(network_topology.createCircuit(currRequest)==0)
       	{
       		//System.out.println("Success!");
@@ -64,11 +77,6 @@ public class RoutingPerformance
       	
       }
    	
-   	//System.out.println(router.computeSHPath("B","K"));
-   	
-   	//System.out.println(router.computeSHPath("F","E"));
-   	
-   	//network_topology.get("K").print();
    	
    	//Print out all analytics
     int totVirtualCircuitRequests = workload.vcRequestCount;
@@ -102,16 +110,58 @@ class RoutingProcessor
 {	
    private static Network network_topology;
    private static String routing_method;
+   
+   /*
+    * Main constructor . Takes in the network topology as an input 
+    */
    public RoutingProcessor(Network netIn)
    {
 	   network_topology = netIn;
 	   routing_method="SHP";
 	   
    }
+   
+   /*
+    * Sets the routing method
+    * Takes string as input
+    * "SHP", "SDP", "LLP"
+    */
    public void setMethod(String method)
    {
 	   routing_method=method;
    }
+   
+   
+   /*
+    * Compute best path between two nodes as specified by their string name
+    */
+   public List<String> computeBestPath(String source, String dest)
+   {
+		Vertex v;
+		List<String>shortestPath = new LinkedList<String>();
+		
+		//First, relax all nodes
+		computeAllPaths(source);
+		
+		//Then go through each onde and return the path as a list of strings
+		for (v= network_topology.get(dest); v != null; v = v.previous)
+		{   
+			shortestPath.add(v.name);
+		}
+		
+		Collections.reverse(shortestPath);
+		
+		//Clear the relaxed values so that they can be recalculated with each term
+		clearPathData();
+		
+		return shortestPath;
+		
+	}
+   
+   /*
+    * First step in dijkstras is to relax each node from a source
+    * Switches between methods based on routng_method
+    */
 	public void computeAllPaths(String source)
 	{
 		Vertex sourceVertex = network_topology.get(source);
@@ -120,8 +170,11 @@ class RoutingProcessor
 
 		Queue<Vertex> vertexQueue = new LinkedList<Vertex>();
 		
+		
+		//Switch between methods and decide what to do
 		if(routing_method.equals("SHP"))
 		{
+			//SHP, weight of each edge is 1
 			sourceVertex.minDistance = 0;
 			vertexQueue.add(sourceVertex);
 			while(!vertexQueue.isEmpty())
@@ -145,6 +198,8 @@ class RoutingProcessor
 				
 		else if (routing_method.equals("SDP"))
 		{
+			
+			//SDP, weight of each edge is it's propagation delay
 			sourceVertex.minDistance = 0;
 			vertexQueue.add(sourceVertex);
 			while(!vertexQueue.isEmpty())
@@ -166,6 +221,7 @@ class RoutingProcessor
 		}
 		else if (routing_method.equals("LLP"))
 		{
+			//LLP, weight each edge is activeCircuits/AvailableCircuits
 			sourceVertex.minDistance = 0;
 			vertexQueue.add(sourceVertex);
 			while(!vertexQueue.isEmpty())
@@ -192,25 +248,8 @@ class RoutingProcessor
 		
 		
 	}
-	public List<String> computeBestPath(String source, String dest)
-	{
-		Vertex v;
-		List<String>shortestPath = new LinkedList<String>();
-		
-		computeAllPaths(source);
-		
-		for (v= network_topology.get(dest); v != null; v = v.previous)
-		{   
-			shortestPath.add(v.name);
-		}
-		
-		Collections.reverse(shortestPath);
-		
-		clearPathData();
-		
-		return shortestPath;
-		
-	}
+	
+	//Delete all shortest path data
 	public void clearPathData()
 	{
 		//Clear out all paths

@@ -1,6 +1,13 @@
 import java.util.*;
 import java.io.*;
 //import java.util.Queue;
+
+/*
+ * Workload class
+ * Creates and contains all data on the workload of the network
+ * Workload is represented by a queue of 'Requests' sorted by
+ * timestamp. Each request can be processed by 'Network' class
+ */
 public class Workload
 {
 	Comparator<Request> rCompare = new RequestComparator();
@@ -10,11 +17,20 @@ public class Workload
 	public int vcRequestCount;
 	public int packetRequestCount;
 	
+	//Rubbish constructor
 	public Workload()
 	{
 		 System.out.println("WOOO");
 	}
 	
+	/*
+	 * Main constructor
+	 * Takes in filename, packet rate and networking scheme as arguments
+	 * Creates an ordered queue of requests according to the networking scheme
+	 * Each line of the file is a virtual circuit connection
+	 * if networking scheme is 'PACKET', then one virtual circuit connection has n 'requests'
+	 * 
+	 */
 	public Workload (String filename, float packetRate, String _networkingScheme) throws IOException
 	{
 		allRequests = new PriorityQueue<Request>(100, rCompare);
@@ -25,10 +41,12 @@ public class Workload
 		vcRequestCount = 0;
 		packetRequestCount = 0;
 		
+		//Switch between networking schemes
 		if(networkingScheme.equals("CIRCUIT"))
 		{
 			while(instream.ready())
 			{
+				//Parse each line individually and create a request
 				inputLine = instream.readLine();
 				currRequest = parseCircuits(inputLine);
 				currRequest.packets = (int) Math.ceil(currRequest.duration*(float)packetRate);
@@ -41,6 +59,7 @@ public class Workload
 		{
 			while(instream.ready())
 			{
+				//Parse each line and create a series of requests based on input line
 				inputLine = instream.readLine();
 				packetDuration = 1/packetRate;
 				parsePackets(inputLine, packetDuration);
@@ -64,6 +83,12 @@ public class Workload
 		
 		return request;
 	}
+	
+	/*
+	 * Takes an input line and packet duration and creates n-requests
+	 * where n is the number of packets during the active conection
+	 * Adds the requests ot the sorted queue
+	 */
 	public void parsePackets (String line, float packetDuration)
 	{
 		Request currRequest;
@@ -78,6 +103,8 @@ public class Workload
 		currTime = Float.parseFloat(params[0]);
 		duration = Float.parseFloat(params[3]);
 		endTime = currTime + duration;
+		
+		//While the time is < endtime, create more packets and increment currtime
 		for (currTime = Float.parseFloat(params[0]); 
 				currTime < endTime; 
 				currTime+=packetDuration)
@@ -101,6 +128,7 @@ public class Workload
 		
 	}
 	
+	//Interface functions to add, remove and poll requests from outside class
 	public void add(Request _request)
 	{
 		allRequests.add(_request);
@@ -123,6 +151,13 @@ public class Workload
 	}
 		
 }
+
+/*
+ * Request class. Contains information on source, dest, begin time and duration
+ * of a network conection request
+ * Initialised with an empty path that will be filled in the main routing 
+ * processor
+ */
 class Request
 {
 	float timestamp;
@@ -146,6 +181,7 @@ class Request
 	}
 }
 
+//Comparator class for sorting reuqests by timestamp
 class RequestComparator implements Comparator<Request>
 {
 	@Override
