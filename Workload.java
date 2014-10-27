@@ -7,6 +7,8 @@ public class Workload
 	private PriorityQueue<Request> allRequests;
 	private static String networkingScheme;
 	private float packetDuration;
+	public int vcRequestCount;
+	public int packetRequestCount;
 	
 	public Workload()
 	{
@@ -20,14 +22,19 @@ public class Workload
 		String inputLine;
 		Request currRequest;
 		networkingScheme = _networkingScheme;
+		vcRequestCount = 0;
+		packetRequestCount = 0;
+		
 		if(networkingScheme.equals("CIRCUIT"))
 		{
 			while(instream.ready())
 			{
 				inputLine = instream.readLine();
 				currRequest = parseCircuits(inputLine);
-				currRequest.packets = (int) Math.round(currRequest.duration*packetRate);
+				currRequest.packets = (int) Math.ceil(currRequest.duration*(float)packetRate);
 				allRequests.add(currRequest);
+				vcRequestCount++;
+				packetRequestCount+=currRequest.packets;
 			}
 		}	
 		else if(networkingScheme.equals("PACKET"))
@@ -37,11 +44,9 @@ public class Workload
 				inputLine = instream.readLine();
 				packetDuration = 1/packetRate;
 				parsePackets(inputLine, packetDuration);
+				vcRequestCount++;
 			}
 		}	
-			
-			
-		
 
 		
 		instream.close();
@@ -89,7 +94,7 @@ public class Workload
 			{
 				currRequest.duration = packetDuration-(float)0.0001;
 			}
-			
+			packetRequestCount++;
 			allRequests.add(currRequest);
 		}
 		

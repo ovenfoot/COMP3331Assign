@@ -6,6 +6,9 @@ public class Network
 	Comparator<Request> rCompare = new RequestComparator();
 	HashMap<String, Vertex> nodes;
 	PriorityQueue<Request> activeVirtualCircuits;
+	public int successfullyRoutedCount;
+	public int blockedCount;
+
 	public Network()
 	{
 		 nodes = new HashMap<String, Vertex>();
@@ -18,6 +21,9 @@ public class Network
 		activeVirtualCircuits = new PriorityQueue<Request>(10, rCompare);
 		BufferedReader instream = new BufferedReader(new FileReader(filename));
 		String inputLine;
+		
+		successfullyRoutedCount = 0;
+		blockedCount = 0;
 		
 		while(instream.ready())
 		{
@@ -99,6 +105,7 @@ public class Network
 					currEdge.activeVCs--;
 				}
 				//System.out.println("Blocked");
+				blockedCount++;
 				return 1;
 			}
 			
@@ -106,6 +113,7 @@ public class Network
 		
 		request.active = true;
 		activeVirtualCircuits.add(request);
+		successfullyRoutedCount++;
 		return 0;
 	}
 	public void scrubObsoleteVCs(float time)
@@ -138,6 +146,31 @@ public class Network
 			currEdge = nodes.get(vertices.get(i-1)).adjacentGet(vertices.get(i));		
 			currEdge.activeVCs--;
 		}
+	}
+	
+	//calculate the propagation delay of a request, given an initiated path
+	public float calculateCumPropDelay(Request request)
+	{
+		float totalPropDelay = 0;
+		Edge currEdge;
+		List <String> vertices = request.path;
+		
+		//Go through each edge in the path and sum up propagation delay
+		for(int i=1; i<vertices.size(); i++)
+		{
+			currEdge = nodes.get(vertices.get(i-1)).adjacentGet(vertices.get(i));
+			totalPropDelay+=currEdge.propDelay;
+		}
+		
+		return totalPropDelay;
+	}
+	
+	
+	//calculate number of hops by looking at path size
+  	//Take away 1 because of the fencepost problem i.e. (A-B) is only one hop
+	public int numHops(Request request) 
+	{
+		return request.path.size();
 	}
 	
 	public Vertex get(String key)
@@ -179,7 +212,7 @@ class Edge
 {
 	String destName;
 	String sourceName;
-	int propDelay;
+	float propDelay;
 	int vcCapacity;
 	int activeVCs=0;
 	
