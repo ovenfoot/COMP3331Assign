@@ -113,6 +113,7 @@ public class Workload
 			currRequest.timestamp = currTime;
 			currRequest.source = source;
 			currRequest.dest = dest;
+			currRequest.packets = 1;
 			if((currTime + packetDuration)> endTime)
 			{
 				currRequest.duration = endTime - currTime;
@@ -148,6 +149,10 @@ public class Workload
 	public Boolean isEmpty()
 	{
 		return allRequests.isEmpty();
+	}
+	public int size()
+	{
+		return allRequests.size();
 	}
 		
 }

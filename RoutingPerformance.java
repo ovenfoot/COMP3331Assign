@@ -17,6 +17,7 @@ public class RoutingPerformance
    private static int PACKET_RATE = 4;
    public static int numHops;
    public static float cumPropagationDelay;
+   public static int totalRequests;
    
    public static void main(String[] args) throws Exception
    {
@@ -44,6 +45,9 @@ public class RoutingPerformance
    	
    	
    	//go throug hthe workload and process each request
+   	
+   	
+   	totalRequests = workload.size();
    	while(!workload.isEmpty())
    	{
    		//Pop off the top of the list
@@ -85,8 +89,8 @@ public class RoutingPerformance
     float percentageSuccessPackets = (float) (((float) successfulPackets/(float) totPackets) * 100.0);
     int blockedPackets = network_topology.blockedCount;
     float perecentageBlockedPackets = (float) (((float) blockedPackets/ (float) totPackets) * 100.0);
-    float averageNumHops = (float) numHops/ (float) totPackets;
-    float averageCumPropDelay = (float) cumPropagationDelay/ (float) totPackets;
+    float averageNumHops = (float) numHops/ (float) totalRequests;
+    float averageCumPropDelay = (float) cumPropagationDelay/ (float) totalRequests;
     
     System.out.println("total number of virtual circuit requests: " + totVirtualCircuitRequests);
     System.out.println("total number of packets: " + totPackets);
@@ -94,8 +98,8 @@ public class RoutingPerformance
     System.out.format("percentage of successfully routed packets: %.2f\n", percentageSuccessPackets);
     System.out.println("number of blocked packets: " + blockedPackets);
     System.out.format("percentage of blocked packets: %.2f\n", perecentageBlockedPackets);
-    System.out.println("average number of hops per circuit: " + averageNumHops);
-    System.out.println("average cumulative propagation delay per circuit: " + averageCumPropDelay);
+    System.out.format("average number of hops per circuit: %.2f\n" , averageNumHops);
+    System.out.format("average cumulative propagation delay per circuit: %.2f\n" , averageCumPropDelay);
     
     
    

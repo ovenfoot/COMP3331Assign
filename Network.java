@@ -143,7 +143,7 @@ public class Network
 				//System.out.println("Blocked");
 
 				//return non zero to indicate blocked
-				blockedCount++;
+				blockedCount+=request.packets;
 				return 1;
 			}
 			
@@ -152,7 +152,7 @@ public class Network
 		//Activate the request and add it to the ative queue
 		request.active = true;
 		activeVirtualCircuits.add(request);
-		successfullyRoutedCount++;
+		successfullyRoutedCount+=request.packets;
 		return 0;
 	}
 	/*
