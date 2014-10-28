@@ -1,6 +1,6 @@
 import java.util.*;
 
-import sun.net.www.protocol.gopher.GopherClient;
+//import sun.net.www.protocol.gopher.GopherClient;
 
 
 public class RoutingPerformance
@@ -47,7 +47,7 @@ public class RoutingPerformance
    	
    	
    	
-   	//go throug hthe workload and process each request
+   	//go through the workload and process each request
    	
    	
    	totalRequests = workload.size();
