@@ -27,6 +27,9 @@ public class RoutingPerformance
       return;
    }
    	Request currRequest;
+   	int successfulPackets = 0;
+  	int blockedPackets = 0;
+  	int totPackets = 0;
    	
    	//Initialise Network topology and workload based on input files
    	
@@ -52,7 +55,7 @@ public class RoutingPerformance
    	{
    		//Pop off the top of the list
       	currRequest = workload.remove();
-
+      	totPackets++;
 //      	System.out.println("Packets: "+ currRequest.packets);
 //      	System.out.println("Computing: " +currRequest.source + " to " +currRequest.dest + " currtime is: " + currRequest.timestamp + 
 //      			" endtime is: " + currRequest.endtime());
@@ -63,9 +66,7 @@ public class RoutingPerformance
       	
       	//System.out.println(currRequest.path);
       	
-      	//Sum up the number of hops and propagation delay on the path
-      	numHops+= network_topology.numHops(currRequest);
-      	cumPropagationDelay+=network_topology.calculateCumPropDelay(currRequest);
+      	
       	
       	
       	
@@ -73,10 +74,16 @@ public class RoutingPerformance
       	if(network_topology.createCircuit(currRequest)==0)
       	{
       		//System.out.println("Success!");
+      		//Sum up the number of hops and propagation delay on the path
+          	numHops+= network_topology.numHops(currRequest);
+          	cumPropagationDelay+=network_topology.calculateCumPropDelay(currRequest);
+          	successfulPackets++;
+          	
       	}
       	else
       	{
       		//System.out.println("BLOCKED");
+      		blockedPackets++;
       	}
       	
       }
@@ -84,13 +91,10 @@ public class RoutingPerformance
    	
    	//Print out all analytics
     int totVirtualCircuitRequests = workload.vcRequestCount;
-    int totPackets = workload.packetRequestCount;
-    int successfulPackets = network_topology.successfullyRoutedCount;
     float percentageSuccessPackets = (float) (((float) successfulPackets/(float) totPackets) * 100.0);
-    int blockedPackets = network_topology.blockedCount;
     float perecentageBlockedPackets = (float) (((float) blockedPackets/ (float) totPackets) * 100.0);
-    float averageNumHops = (float) numHops/ (float) totalRequests;
-    float averageCumPropDelay = (float) cumPropagationDelay/ (float) totalRequests;
+    float averageNumHops = (float) numHops/ (float) successfulPackets;
+    float averageCumPropDelay = (float) cumPropagationDelay/ (float) successfulPackets;
     
     System.out.println("total number of virtual circuit requests: " + totVirtualCircuitRequests);
     System.out.println("total number of packets: " + totPackets);
