@@ -45,16 +45,18 @@ public class RoutingPerformance
         
             // Calculate the path using the routing processor
             if (!currRequest.hasPath()) {
+            	System.out.println("calculating path between" + currRequest.source + " and " + currRequest.dest);
             	currRequest.path = router.computeBestPath(currRequest.source, currRequest.dest);
             }
             // createCircuit returns 0 if path is successful. nonzero if blocked
+            
+            System.out.println("routing ... " + currRequest.path);
             if(network_topology.createCircuit(currRequest) == 0)
             {
                 // Sum up the number of hops and propagation delay on the path
                 numHops += network_topology.numHops(currRequest);
                 cumPropagationDelay += network_topology.calculateCumPropDelay(currRequest);
                 successfulPackets++;
-                
             } else {
                 blockedPackets++;
             }
@@ -63,6 +65,8 @@ public class RoutingPerformance
             if(currRequest.packets != 0) {
             	currRequest.duration -= currRequest.packetDuration;
             	currRequest.timestamp += currRequest.packetDuration;
+            	System.out.println("packet duration is " + currRequest.packetDuration);
+            	System.out.println("newTimestamp is + " + currRequest.timestamp);
                 workload.add(currRequest);
             }
         }
