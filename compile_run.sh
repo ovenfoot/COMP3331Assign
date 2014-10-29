@@ -1,3 +1,3 @@
 #!/bin/sh
 javac *.java
-java RoutingPerformance topology.txt workload.txt 2
+java RoutingPerformance PACKET LLP topology.txt workload.txt 1 
