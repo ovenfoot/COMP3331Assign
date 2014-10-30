@@ -34,6 +34,7 @@ public class Workload
         networkingScheme = _networkingScheme;
         vcRequestCount = 0;
         packetRequestCount = 0;
+        packetDuration = 1/packetRate;
         
         //Switch between networking schemes
         if(networkingScheme.equals("CIRCUIT"))

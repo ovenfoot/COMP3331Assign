@@ -45,12 +45,12 @@ public class RoutingPerformance
         
             // Calculate the path using the routing processor
             if (!currRequest.hasPath()) {
-            	System.out.println("calculating path between" + currRequest.source + " and " + currRequest.dest);
+            	//System.out.println("calculating path between" + currRequest.source + " and " + currRequest.dest);
             	currRequest.path = router.computeBestPath(currRequest.source, currRequest.dest);
             }
             // createCircuit returns 0 if path is successful. nonzero if blocked
             
-            System.out.println("routing ... " + currRequest.path);
+            //System.out.println("routing ... " + currRequest.path);
             if(network_topology.createCircuit(currRequest) == 0)
             {
                 // Sum up the number of hops and propagation delay on the path
@@ -65,8 +65,8 @@ public class RoutingPerformance
             if(currRequest.packets != 0) {
             	currRequest.duration -= currRequest.packetDuration;
             	currRequest.timestamp += currRequest.packetDuration;
-            	System.out.println("packet duration is " + currRequest.packetDuration);
-            	System.out.println("newTimestamp is + " + currRequest.timestamp);
+            	//System.out.println("packet duration is " + currRequest.packetDuration);
+            	//System.out.println("newTimestamp is + " + currRequest.timestamp);
                 workload.add(currRequest);
             }
         }
@@ -78,6 +78,8 @@ public class RoutingPerformance
         float averageNumHops = (float) numHops/ (float) successfulPackets;
         float averageCumPropDelay = (float) cumPropagationDelay/ (float) successfulPackets;
         
+        System.out.println("-----------");
+        System.out.println(Arrays.toString(args));
         System.out.println("total number of virtual circuit requests: " + totVirtualCircuitRequests);
         System.out.println("total number of packets: " + totPackets);
         System.out.println("number of successfully routed packets: " + successfulPackets);
