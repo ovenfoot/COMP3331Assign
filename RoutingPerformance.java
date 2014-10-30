@@ -43,8 +43,8 @@ public class RoutingPerformance
             currRequest = workload.remove();
             totPackets++;
         
-            System.out.println("Trying to route between " + currRequest.source + " "+ currRequest.dest + " at time " + currRequest.timestamp + " endtime: " + currRequest.endtime());
-            network_topology.get("A").adjacentGet("B").print();
+            //System.out.println("Trying to route between " + currRequest.source + " "+ currRequest.dest + " at time " + currRequest.timestamp + " endtime: " + currRequest.endtime());
+            //network_topology.get("A").adjacentGet("B").print();
             // Calculate the path using the routing processor
             if (!currRequest.hasPath()) {
             	//System.out.println("calculating path between" + currRequest.source + " and " + currRequest.dest);
@@ -59,10 +59,10 @@ public class RoutingPerformance
                 numHops += network_topology.numHops(currRequest);
                 cumPropagationDelay += network_topology.calculateCumPropDelay(currRequest);
                 successfulPackets++;
-                System.out.println("=======success!=============");
+                //System.out.println("=======success!=============");
             } else {
                 blockedPackets++;
-                System.out.println("=======blocked=============");
+                //System.out.println("=======blocked=============");
             }
             
             currRequest.packets--;

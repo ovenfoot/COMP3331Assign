@@ -174,8 +174,8 @@ class Request
     }
     public Request (Request oldRequest)
     {
-    	System.out.println("creating new request from");
-    	oldRequest.print();
+//    	System.out.println("creating new request from");
+//    	oldRequest.print();
     	timestamp = oldRequest.timestamp;
         dest = oldRequest.dest;
         source = oldRequest.source;
