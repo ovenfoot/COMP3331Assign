@@ -74,7 +74,7 @@ public class Workload
         request.timestamp = currTime;
         request.source    = params[1];
         request.dest      = params[2];
-        request.duration  = duration;
+        request.duration  = duration - Double.MIN_VALUE;
         request.packets = (int) Math.ceil(duration*(double)packetRate);
         request.packetDuration = ((double) 1)/packetRate;
         
@@ -115,7 +115,7 @@ public class Workload
             else
             {
             	// Que?
-                currRequest.duration = packetDuration;//-Double.MIN_VALUE;
+                currRequest.duration = packetDuration-Double.MIN_VALUE;
             }
             packetRequestCount++;
             allRequests.add(currRequest);
@@ -207,14 +207,8 @@ class RequestComparator implements Comparator<Request>
     @Override
     public int compare (Request r1, Request r2)
     {
-        if(r1.timestamp > r2.timestamp)
-        {
-            return 1;
-        }
-        else
-        {
-            return -1;
-        }
+    	
+    	return Double.compare(r1.timestamp, r2.timestamp);
     }
 }
 //hash->hash->(name, delay, capacity)

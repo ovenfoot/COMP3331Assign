@@ -11,7 +11,7 @@ import java.io.*;
  */
 public class Network
 {
-    Comparator<Request> rCompare = new RequestComparator();
+    Comparator<Request> rCompare = new RequestEndComparator();
     HashMap<String, Vertex> nodes;
     PriorityQueue<Request> activeVirtualCircuits;
     public int successfullyRoutedCount;
@@ -284,6 +284,15 @@ class Edge
         intermediateRes = ((double)activeVCs/(double)vcCapacity);
         //System.out.println(intermediateRes);
         return (intermediateRes);
+    }
+}
+class RequestEndComparator implements Comparator<Request>
+{
+    @Override
+    public int compare (Request r1, Request r2)
+    {
+    	
+    	return Double.compare(r1.endtime(), r2.endtime());
     }
 }
 
