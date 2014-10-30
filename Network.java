@@ -120,12 +120,14 @@ public class Network
             // Get the edge using the associated hash between vertex[i-1] and vertex[i]
             currEdge = nodes.get(vertices.get(i-1)).adjacentGet(vertices.get(i));
             
+            //currEdge.print();
+            
             // With each edge, increment the number of active virtual circuits
             if (currEdge.activeVCs < currEdge.vcCapacity)
             {                
-                if(!request.active) {
-                	currEdge.activeVCs++;
-                }
+                currEdge.activeVCs++;
+                
+                
             }
             else
             {              
@@ -145,9 +147,8 @@ public class Network
         
         // Activate the request and add it to the active queue
         request.active = true;
-        if(!activeVirtualCircuits.contains(request)) {
-        	activeVirtualCircuits.add(request);
-        }
+        Request activeRequest = new Request (request);
+        activeVirtualCircuits.add(activeRequest);
         successfullyRoutedCount++;
         return 0;
     }
@@ -162,7 +163,7 @@ public class Network
         {
             Request currRequest = activeVirtualCircuits.peek();
             
-            while(!activeVirtualCircuits.isEmpty() && time > currRequest.endtime())
+            while(!activeVirtualCircuits.isEmpty() && time >= currRequest.endtime())
             {
                 currRequest = activeVirtualCircuits.remove();
                 deleteVC(currRequest);
@@ -276,7 +277,8 @@ class Edge
         System.out.println("Node1: " + destName +
             "|Node 2: " + sourceName + 
             "|propDelay: " + propDelay + 
-            "|vcCapacity: " + vcCapacity);
+            "|vcCapacity: " + vcCapacity +
+            "|activeVCs: " + activeVCs);
     }
     public double load ()
     {

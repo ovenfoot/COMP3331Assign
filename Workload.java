@@ -74,7 +74,7 @@ public class Workload
         request.timestamp = currTime;
         request.source    = params[1];
         request.dest      = params[2];
-        request.duration  = duration - Double.MIN_VALUE;
+        request.duration  = duration;// - Double.MIN_VALUE;
         request.packets = (int) Math.ceil(duration*(double)packetRate);
         request.packetDuration = ((double) 1)/packetRate;
         
@@ -115,7 +115,7 @@ public class Workload
             else
             {
             	// Que?
-                currRequest.duration = packetDuration-Double.MIN_VALUE;
+                currRequest.duration = packetDuration;//-Double.MIN_VALUE;
             }
             packetRequestCount++;
             allRequests.add(currRequest);
@@ -168,12 +168,30 @@ class Request
     Boolean active = false;
     List<String> path;
     
+    public Request ()
+    {
+    	
+    }
+    public Request (Request oldRequest)
+    {
+    	System.out.println("creating new request from");
+    	oldRequest.print();
+    	timestamp = oldRequest.timestamp;
+        dest = oldRequest.dest;
+        source = oldRequest.source;
+        duration = oldRequest.duration;
+        packets = oldRequest.packets;
+        packetDuration = oldRequest.packetDuration;
+        path = oldRequest.path;
+        active = oldRequest.active;
+    }
+    
     public void print()
     {
         System.out.println("Request Timestamp: " + timestamp +
                 "|Source: " + source +
                 "|Dest: " + dest + 
-                "|Duration: "+ duration);
+                "|Endtime: "+ endtime());
     }
     
     public double endtime()
@@ -183,6 +201,8 @@ class Request
         }
         return (timestamp + duration);
     }
+    
+    
 
     public int getPackets()
     {
