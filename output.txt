@@ -1,33 +1,32 @@
 [CIRCUIT, LLP, topology.txt, workload.txt, 1]
 total number of virtual circuit requests: 8377
 total number of packets: 259106
-number of successfully routed packets: 215583
-percentage of successfully routed packets: 83.20
-number of blocked packets: 43523
-percentage of blocked packets: 16.80
-average number of hops per circuit: 4.22
-average cumulative propagation delay per circuit: 183.54
+number of successfully routed packets: 234701
+percentage of successfully routed packets: 90.58
+number of blocked packets: 24405
+percentage of blocked packets: 9.42
+average number of hops per circuit: 3.99
+average cumulative propagation delay per circuit: 194.87
 
 [CIRCUIT, SHP, topology.txt, workload.txt, 1]
 total number of virtual circuit requests: 8377
 total number of packets: 259106
-number of successfully routed packets: 179579
-percentage of successfully routed packets: 69.31
-number of blocked packets: 79527
-percentage of blocked packets: 30.69
-average number of hops per circuit: 3.45
-average cumulative propagation delay per circuit: 147.07
-
+number of successfully routed packets: 170936
+percentage of successfully routed packets: 65.97
+number of blocked packets: 88170
+percentage of blocked packets: 34.03
+average number of hops per circuit: 3.54
+average cumulative propagation delay per circuit: 142.93
 
 [CIRCUIT, SDP, topology.txt, workload.txt, 1]
 total number of virtual circuit requests: 8377
 total number of packets: 259106
-number of successfully routed packets: 187397
-percentage of successfully routed packets: 72.32
-number of blocked packets: 71709
-percentage of blocked packets: 27.68
-average number of hops per circuit: 3.95
-average cumulative propagation delay per circuit: 132.16
+number of successfully routed packets: 229032
+percentage of successfully routed packets: 88.39
+number of blocked packets: 30074
+percentage of blocked packets: 11.61
+average number of hops per circuit: 4.39
+average cumulative propagation delay per circuit: 138.21
 
 [PACKET, SDP, topology.txt, workload.txt, 1]
 total number of virtual circuit requests: 8377
