@@ -43,7 +43,8 @@ public class RoutingPerformance
             currRequest = workload.remove();
             totPackets++;
         
-            //System.out.println("Trying to route between " + currRequest.source + " "+ currRequest.dest + " at time " + currRequest.timestamp + " endtime: " + currRequest.endtime());
+            //System.out.println("Trying to route between " + currRequest.source + " "+ 
+            //currRequest.dest + " at time " + currRequest.timestamp + " endtime: " + currRequest.endtime());
             //network_topology.get("A").adjacentGet("B").print();
             // Calculate the path using the routing processor
             if (!currRequest.hasPath()) {
@@ -83,8 +84,8 @@ public class RoutingPerformance
         double averageNumHops = (double) numHops/ (double) successfulPackets;
         double averageCumPropDelay = (double) cumPropagationDelay/ (double) successfulPackets;
         
-        System.out.println("-----------");
-        System.out.println(Arrays.toString(args));
+//        System.out.println("-----------");
+//        System.out.println(Arrays.toString(args));
         System.out.println("total number of virtual circuit requests: " + totVirtualCircuitRequests);
         System.out.println("total number of packets: " + totPackets);
         System.out.println("number of successfully routed packets: " + successfulPackets);
