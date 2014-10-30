@@ -12,7 +12,7 @@ public class RoutingPerformance
     private static int WORKLOAD_FILE = 3;
     private static int PACKET_RATE = 4;
     public  static int numHops;
-    public  static float cumPropagationDelay;
+    public  static double cumPropagationDelay;
 
     public static void main(String[] args) throws Exception
     {
@@ -73,10 +73,10 @@ public class RoutingPerformance
 
         // Print out all analytics
         int totVirtualCircuitRequests = workload.vcRequestCount;
-        float percentageSuccessPackets = (float) (((float) successfulPackets/(float) totPackets) * 100.0);
-        float perecentageBlockedPackets = (float) (((float) blockedPackets/ (float) totPackets) * 100.0);
-        float averageNumHops = (float) numHops/ (float) successfulPackets;
-        float averageCumPropDelay = (float) cumPropagationDelay/ (float) successfulPackets;
+        double percentageSuccessPackets = (double) (((double) successfulPackets/(double) totPackets) * 100.0);
+        double perecentageBlockedPackets = (double) (((double) blockedPackets/ (double) totPackets) * 100.0);
+        double averageNumHops = (double) numHops/ (double) successfulPackets;
+        double averageCumPropDelay = (double) cumPropagationDelay/ (double) successfulPackets;
         
         System.out.println("-----------");
         System.out.println(Arrays.toString(args));

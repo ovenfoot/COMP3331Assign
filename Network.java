@@ -156,7 +156,7 @@ public class Network
      * Checks entire active list to see if there is anything which is void
      * Deletes from void list and frees up edge
      */
-    public void scrubObsoleteVCs(float time)
+    public void scrubObsoleteVCs(double time)
     {
         if(!activeVirtualCircuits.isEmpty())
         {
@@ -186,9 +186,9 @@ public class Network
     }
     
     // Calculate the propagation delay of a request, given an initiated path
-    public float calculateCumPropDelay(Request request)
+    public double calculateCumPropDelay(Request request)
     {
-        float totalPropDelay = 0;
+        double totalPropDelay = 0;
         Edge currEdge;
         List <String> vertices = request.path;
         
@@ -259,9 +259,14 @@ class Edge
 {
     String destName;
     String sourceName;
-    float propDelay;
+    double propDelay;
     int vcCapacity;
     int activeVCs = 0;
+    
+    public Edge ()
+    {
+    	activeVCs = 0;
+    }
     
     public void print ()
     {
@@ -272,8 +277,8 @@ class Edge
     }
     public double load ()
     {
-        float intermediateRes;
-        intermediateRes = ((float)activeVCs/(float)vcCapacity);
+        double intermediateRes;
+        intermediateRes = ((double)activeVCs/(double)vcCapacity);
         //System.out.println(intermediateRes);
         return (intermediateRes);
     }

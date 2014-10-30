@@ -13,7 +13,7 @@ public class Workload
     Comparator<Request> rCompare = new RequestComparator();
     private PriorityQueue<Request> allRequests;
     private static String networkingScheme;
-    private float packetDuration;
+    private double packetDuration;
     public int vcRequestCount;
     public int packetRequestCount;
     
@@ -25,7 +25,7 @@ public class Workload
      * if networking scheme is 'PACKET', then one virtual circuit connection has n 'requests'
      * 
      */
-    public Workload (String filename, float packetRate, String _networkingScheme) throws IOException
+    public Workload (String filename, double packetRate, String _networkingScheme) throws IOException
     {
         allRequests = new PriorityQueue<Request>(100, rCompare);
         BufferedReader instream = new BufferedReader(new FileReader(filename));
@@ -44,7 +44,7 @@ public class Workload
                 // Parse each line individually and create a request
                 inputLine = instream.readLine();
                 currRequest = parseCircuits(inputLine);
-                currRequest.packets = (int) Math.ceil(currRequest.duration*(float)packetRate);
+                currRequest.packets = (int) Math.ceil(currRequest.duration*(double)packetRate);
                 currRequest.packetDuration = packetDuration;
                 allRequests.add(currRequest);
                 vcRequestCount++;
@@ -71,8 +71,8 @@ public class Workload
         
         String params[] = line.split(" ");
 
-        float currTime = Float.parseFloat(params[0]);
-        float duration = Float.parseFloat(params[3]);
+        double currTime = Double.parseDouble(params[0]);
+        double duration = Double.parseDouble(params[3]);
 
         request.timestamp = currTime;
         request.source    = params[1];
@@ -87,19 +87,19 @@ public class Workload
      * where n is the number of packets during the active connection
      * Adds the requests to the sorted queue
      */
-    public void parsePackets (String line, float packetDuration)
+    public void parsePackets (String line, double packetDuration)
     {
         Request currRequest;
-        float currTime;
-        float endTime;
-        float duration;
+        double currTime;
+        double endTime;
+        double duration;
         String source, dest;
         String params[] = line.split(" ");
         
         source = params[1];
         dest = params[2];
-        currTime = Float.parseFloat(params[0]);
-        duration = Float.parseFloat(params[3]);
+        currTime = Double.parseDouble(params[0]);
+        duration = Double.parseDouble(params[3]);
         endTime = currTime + duration;
         
         // While the time is < endtime, create more packets and increment currtime
@@ -116,7 +116,7 @@ public class Workload
             else
             {
             	// Que?
-                currRequest.duration = packetDuration-(float)0.0001;
+                currRequest.duration = packetDuration-Double.MIN_VALUE;
             }
             packetRequestCount++;
             allRequests.add(currRequest);
@@ -159,12 +159,12 @@ public class Workload
  */
 class Request
 {
-    float timestamp;
+    double timestamp;
     String dest;
     String source;
-    float duration;
+    double duration;
     int packets;
-    float packetDuration;
+    double packetDuration;
     
     Boolean active = false;
     List<String> path;
@@ -177,7 +177,7 @@ class Request
                 "|Duration: "+ duration);
     }
     
-    public float endtime()
+    public double endtime()
     {
         if (packets > 1) {
             return timestamp + packetDuration;
