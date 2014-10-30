@@ -2,6 +2,6 @@
 	javac -g $*.java
 
 default:
-	javac -g RoutingPerfomance.java Workload.java Network.java
+	javac -g RoutingPerformance.java Workload.java Network.java
 clean:
 	$(RM) *.class
