@@ -28,3 +28,35 @@ number of blocked packets: 71709
 percentage of blocked packets: 27.68
 average number of hops per circuit: 3.95
 average cumulative propagation delay per circuit: 132.16
+
+[PACKET, SDP, topology.txt, workload.txt, 1]
+total number of virtual circuit requests: 8377
+total number of packets: 259106
+number of successfully routed packets: 245136
+percentage of successfully routed packets: 94.61
+number of blocked packets: 13970
+percentage of blocked packets: 5.39
+average number of hops per circuit: 4.36
+average cumulative propagation delay per circuit: 139.76
+
+[PACKET, SHP, topology.txt, workload.txt, 1]
+total number of virtual circuit requests: 8377
+total number of packets: 259106
+number of successfully routed packets: 235773
+percentage of successfully routed packets: 90.99
+number of blocked packets: 23333
+percentage of blocked packets: 9.01
+average number of hops per circuit: 3.64
+average cumulative propagation delay per circuit: 165.74
+
+
+[PACKET, LLP, topology.txt, workload.txt, 1]
+total number of virtual circuit requests: 8377
+total number of packets: 259106
+number of successfully routed packets: 258644
+percentage of successfully routed packets: 99.82
+number of blocked packets: 462
+percentage of blocked packets: 0.18
+average number of hops per circuit: 4.88
+average cumulative propagation delay per circuit: 238.40
+
