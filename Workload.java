@@ -34,7 +34,7 @@ public class Workload
         networkingScheme = _networkingScheme;
         vcRequestCount = 0;
         packetRequestCount = 0;
-        packetDuration = 1/packetRate;
+        packetDuration = ((double) 1)/packetRate;
         
         //Switch between networking schemes
         if(networkingScheme.equals("CIRCUIT"))
@@ -43,9 +43,7 @@ public class Workload
             {
                 // Parse each line individually and create a request
                 inputLine = instream.readLine();
-                currRequest = parseCircuits(inputLine);
-                currRequest.packets = (int) Math.ceil(currRequest.duration*(double)packetRate);
-                currRequest.packetDuration = packetDuration;
+                currRequest = parseCircuits(inputLine, packetRate);
                 allRequests.add(currRequest);
                 vcRequestCount++;
                 packetRequestCount += currRequest.packets;
@@ -57,7 +55,6 @@ public class Workload
             {
                 //Parse each line and create a series of requests based on input line
                 inputLine = instream.readLine();
-                packetDuration = 1/packetRate;
                 parsePackets(inputLine, packetDuration);
                 vcRequestCount++;
             }
@@ -65,7 +62,7 @@ public class Workload
 
         instream.close();
     }
-    public Request parseCircuits (String line)
+    public Request parseCircuits (String line, double packetRate)
     {
         Request request = new Request();
         
@@ -78,6 +75,8 @@ public class Workload
         request.source    = params[1];
         request.dest      = params[2];
         request.duration  = duration;
+        request.packets = (int) Math.ceil(duration*(double)packetRate);
+        request.packetDuration = ((double) 1)/packetRate;
         
         return request;
     }
@@ -116,7 +115,7 @@ public class Workload
             else
             {
             	// Que?
-                currRequest.duration = packetDuration-Double.MIN_VALUE;
+                currRequest.duration = packetDuration;//-Double.MIN_VALUE;
             }
             packetRequestCount++;
             allRequests.add(currRequest);

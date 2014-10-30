@@ -227,7 +227,7 @@ public class Network
  * Edges are keyed by their destination node name (as a string)
  * adjacent.get(string s) returns the edge at string s
  */
-class Vertex
+class Vertex implements Comparable<Vertex>
 {
     String name;
     Vertex previous;
@@ -248,6 +248,10 @@ class Vertex
     {
         return adjacentVertices.get(s);
     }
+    public int compareTo(Vertex otherVertex)
+    {
+    	return Double.compare(minDistance, otherVertex.minDistance);
+    }
 }
 
 
@@ -267,7 +271,6 @@ class Edge
     {
     	activeVCs = 0;
     }
-    
     public void print ()
     {
         System.out.println("Node1: " + destName +

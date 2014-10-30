@@ -153,7 +153,7 @@ class RoutingProcessor
         Vertex u,v;
         double distuv;
 
-        Queue<Vertex> vertexQueue = new LinkedList<Vertex>();
+        Queue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
         
         
         // Switch between methods and decide what to do
