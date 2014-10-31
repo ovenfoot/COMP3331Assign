@@ -196,9 +196,6 @@ class Request
     
     public double endtime()
     {
-//        if (packets > 1) {
-//            return timestamp + packetDuration;
-//        }
         return (timestamp + duration);
     }
     

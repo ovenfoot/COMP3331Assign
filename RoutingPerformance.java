@@ -43,15 +43,10 @@ public class RoutingPerformance
             currRequest = workload.remove();
             totPackets+=currRequest.packets;
         
-            //System.out.println("Trying to route between " + currRequest.source + " "+ 
-            //currRequest.dest + " at time " + currRequest.timestamp + " endtime: " + currRequest.endtime());
-            //network_topology.get("A").adjacentGet("B").print();
-            // Calculate the path using the routing processor
-            //System.out.println("calculating path between" + currRequest.source + " and " + currRequest.dest);
+
             currRequest.path = router.computeBestPath(currRequest.source, currRequest.dest);
-            // createCircuit returns 0 if path is successful. nonzero if blocked
-            
-            //System.out.println("routing ... " + currRequest.path);
+
+
             if(network_topology.createCircuit(currRequest) == 0)
             {
                 // Sum up the number of hops and propagation delay on the path
@@ -64,16 +59,8 @@ public class RoutingPerformance
                 //System.out.println("=======blocked=============");
             }
             
-//            currRequest.packets--;
-//           
-//            if(currRequest.packets != 0) {
-//            	currRequest.duration -= currRequest.packetDuration;
-//            	currRequest.timestamp += currRequest.packetDuration;
-//            	//System.out.println("packet duration is " + currRequest.packetDuration);
-//            	//System.out.println("newTimestamp is + " + currRequest.timestamp);
-//                workload.add(currRequest);
-//            }
         }
+        
 
         // Print out all analytics
         int totVirtualCircuitRequests = workload.vcRequestCount;
@@ -83,7 +70,7 @@ public class RoutingPerformance
         double averageCumPropDelay = (double) cumPropagationDelay/ (double) successfulPackets;
         
 //        System.out.println("-----------");
-        System.out.println(Arrays.toString(args));
+//        System.out.println(Arrays.toString(args));
         System.out.println("total number of virtual circuit requests: " + totVirtualCircuitRequests);
         System.out.println("total number of packets: " + totPackets);
         System.out.println("number of successfully routed packets: " + successfulPackets);
